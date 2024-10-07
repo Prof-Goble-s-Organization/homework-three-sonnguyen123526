@@ -1,5 +1,9 @@
 package hw03;
 
+import java.util.NoSuchElementException;
+
+import java.util.NoSuchElementException;
+
 /**
  * An implementation of the CS132List interface backed with an array of Objects.
  * 
@@ -7,16 +11,66 @@ package hw03;
  * @author Dickinson College
  * @version Feb 18, 2016
  */
-public class CS232ArrayList<E> implements CS232List<E> {
+public class CS232ArrayList<E> implements CS232List<E>, CS232Iterable<E> {
 
     private static final int INITIAL_CAPACITY = 10;
 
     private E[] listElements;
     private int currentSize;
 
-    /**
+    private class SmallArrayList<E> implements CS232Iterator<E>{
+
+        private int cursor;
+
+        public SmallArrayList(){
+            cursor = 0;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return cursor < currentSize;
+        }
+
+        @Override
+        public E next() {
+            if(!hasNext()){
+                throw new NoSuchElementException("There is nothing to look forward");
+            }
+        }
+
+        @Override
+        public boolean hasPrevious() {
+           return cursor > 0;
+        }
+
+        @Override
+        public E previous() {
+            if(!hasPrevious()){
+                throw new NoSuchElementException("There is nothing holding me back");
+            }
+            else{
+                cursor--;
+                return get(cursor);
+            }
+        }
+            
+        @Override
+        public void insert(E element) {
+            throw new UnsupportedOperationException("Unimplemented method 'insert'");
+        }
+
+        @Override
+        public E remove() {
+            throw new UnsupportedOperationException("Unimplemented method 'remove'");
+        }
+        
+    } 
+    
+
+        /**
      * Construct a new ArrayBackedList.
      */
+
     public CS232ArrayList() {
         listElements = (E[]) new Object[INITIAL_CAPACITY];
         currentSize = 0;
@@ -143,5 +197,10 @@ public class CS232ArrayList<E> implements CS232List<E> {
 
             return elem;
         }
+    }
+
+    @Override
+    public CS232Iterator<E> getIterator() {
+        return new SmallArrayList();
     }
 }

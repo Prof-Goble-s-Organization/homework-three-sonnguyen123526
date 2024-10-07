@@ -157,6 +157,7 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 	private class DLLIterator implements CS232Iterator<E> {
 
 		private DLLNode cursor;
+		private DLLNode exCursor;
 
 		public DLLIterator() {
 			cursor = head;
@@ -177,12 +178,18 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 
 		public boolean hasPrevious() {
 			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			return cursor.prev != null;
 		}
 
 		public E previous() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if(!hasPrevious()){
+				throw new NoSuchElementException("There is nothing holding me back");
+			}
+			else{
+				exCursor = cursor;
+				cursor = cursor.prev;
+				return cursor.element;
+			}
 		}
 
 		public void insert(E element) {
@@ -194,10 +201,23 @@ public class CS232IterableDoublyLinkedList<E> implements CS232List<E>,
 		}
 
 		public E remove() {
-			// Intentionally not implemented, see HW assignment!
-			throw new UnsupportedOperationException("Not implemented");
+			if(exCursor == null){
+				throw new IllegalStateException("...");
+			}
+			else
+			{
+				DLLNode node = exCursor;
+				cursor = exCursor.prev;
+
+				node.prev.next = node.next;
+				node.next.prev = node.prev;
+
+				size --;
+				exCursor = null;
+
+				return node.element;
+			}
 		}
-	}
 	
 	/**
 	 * Helper method for testing that checks that all of the links are

@@ -114,8 +114,14 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 * {@inheritDoc}
 	 */
 	public E remove(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
-		return null;
+		DLLNode node = getNode(index);
+		E element = node.element;
+
+		node.prev.next = node.next;
+		node.next.prev = node.prev;
+
+		size--;
+		return element;
 	}
 
 	/**
@@ -128,7 +134,12 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 *             if index < 0 or index >= size()
 	 */
 	public void clearTo(int index) throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+		DLLNode node = getNode(index);
+
+		head.next = node.next;
+		node.next.prev = head;
+
+		size -= (index +1);
 	}
 
 	/**
@@ -149,7 +160,30 @@ public class CS232DoublyLinkedList<E> implements CS232List<E> {
 	 */
 	public void addAllAt(int index, CS232DoublyLinkedList<E> list)
 			throws IndexOutOfBoundsException {
-		// Intentionally not implemented.
+		if(list.size == 0){
+			throw new IllegalArgumentException("The list is empty");
+		}
+		if(index < 0 || index > size){
+			throw new IndexOutOfBoundsException("Invalid index");
+		}
+		else{
+			DLLNode node = tail;
+    	if (index != size) {
+        	node = getNode(index);
+    	}
+
+    	DLLNode pred = node.prev;
+    	DLLNode addToHead = list.head.next;
+    	DLLNode addAtTail = list.tail.prev;
+
+    	pred.next = addToHead;
+    	addToHead.prev = pred;
+
+    	addAtTail.next = node;
+    	node.prev = addAtTail;
+
+   		size += list.size();
+		}
 	}
 
 	/*
