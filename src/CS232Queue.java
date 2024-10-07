@@ -5,7 +5,7 @@
  * @author Dickinson College
  * @version Feb 8, 2024
  */
-public interface COMP232Queue<U> {
+public interface CS232Queue<U> {
     /**
      * Add the provided Object to the end of the Queue.
      * 
